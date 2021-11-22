@@ -9,9 +9,9 @@ sealed class HomeRecyclerViewItem {
 
     class Movie(
         val id: Int,
-        val title: String,
-        val thumbnail: String,
-        val release_date: String
+        val title: String?,
+        val thumbnail: String?,
+        val release_date: String?
     ) : HomeRecyclerViewItem()
 
     class Director(

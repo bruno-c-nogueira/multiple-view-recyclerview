@@ -18,7 +18,7 @@ fun View.hide() {
     this.visibility = View.GONE
 }
 
-fun SimpleDraweeView.loadImage(url: String) {
+fun SimpleDraweeView.loadImage(url: String?) {
     this.setImageURI(Uri.parse(url))
 }
 

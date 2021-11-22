@@ -24,7 +24,24 @@ class HomeViewModel @Inject constructor(
         getHomeListItems()
     }
 
-    private fun getHomeListItems() {
+    private fun getHomeListItems() = viewModelScope.launch {
+        _homeListItemsLiveData.postValue(Resource.Loading)
+        val moviesDef = async { repository.getMovies() }
+        val directorsDef = async { repository.getDirectors() }
 
+        val movies = moviesDef.await()
+        val directors = directorsDef.await()
+
+        val homeItemsList = mutableListOf<HomeRecyclerViewItem>()
+        if (movies is Resource.Success && directors is Resource.Success) {
+            homeItemsList.add(HomeRecyclerViewItem.Title(1, "Recommended Movies"))
+            homeItemsList.addAll(movies.value)
+            homeItemsList.add(HomeRecyclerViewItem.Title(2, "The Directors"))
+            homeItemsList.addAll(directors.value)
+            _homeListItemsLiveData.postValue(Resource.Success(homeItemsList))
+        } else {
+            Resource.Failure(false, null, null)
+        }
     }
+
 }
